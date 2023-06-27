@@ -2,7 +2,7 @@
 This project was created for the [Zurich cloud hackaton challenge](https://nuwe.io/dev/competitions/zurich-cloud-hackathon/online-preselection-cloud-challenge) 
 
 ## Infrastructure and decisions taken
-[The infrastructure of the solution](docs/infrastructure.png)
+![The infrastructure of the solution](docs/infrastructure.png)
 
 I created a S3 bucket where the user data can be uploaded. 
 
