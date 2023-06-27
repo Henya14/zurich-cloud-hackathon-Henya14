@@ -2,6 +2,7 @@ import boto3
 import json
 import logging
 import os
+import uuid
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -17,6 +18,9 @@ def process_new_users(event, _):
         logger.error("No 'Records' found in event")
         raise ValueError(("Event does not have key named 'Records'"))
     
+    users_to_write = []
+    cars_to_write = []
+
     for record in event["Records"]:
         bucket = record["s3"]["bucket"]["name"]
         s3_file_key = record["s3"]["object"]["key"]
@@ -26,6 +30,25 @@ def process_new_users(event, _):
         users = json.loads(user_file["Body"].read())
         logger.info(f"Loaded file: {user_file}")
         for user in users:
+            car = user["car"]
+            car_uuid = str(uuid.uuid4())
+            user["car"] = car_uuid
+            car["id"] = car_uuid
+            logger.info(car)
             logger.info(user)
+            users_to_write.append(user)
+            cars_to_write.append(car)
 
+    logger.info(users_to_write)
+    logger.info(cars_to_write)
+
+    user_table = dynamodb.Table(os.environ.get("user_db_name"))
+    car_table = dynamodb.Table(os.environ.get("car_db_name"))
+    
+    with user_table.batch_writer() as user_writer:
+        with car_table.batch_writer() as car_writer:
+            for user in users_to_write:
+                user_writer.put_item(user)
+            for car in cars_to_write:
+                car_writer.put_item(car)
     

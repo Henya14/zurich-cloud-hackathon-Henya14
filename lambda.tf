@@ -13,6 +13,13 @@ resource "aws_lambda_function" "user_data_processor" {
   runtime = "python3.10"
   handler = "user_data_processor.process_new_users"
   timeout = 200
+
+  environment {
+    variables = {
+      user_db_name = var.user_db_name 
+      car_db_name = var.car_db_name 
+    }
+  }
 }
 
 resource "aws_lambda_permission" "allow_bucket_lambda_invocation" {
