@@ -51,9 +51,10 @@ def write_users_and_cars_to_db(users_to_write, cars_to_write):
     user_table = dynamodb.Table(os.environ.get("user_db_name"))
     car_table = dynamodb.Table(os.environ.get("car_db_name"))
     
-    with user_table.batch_writer() as user_writer:
-        with car_table.batch_writer() as car_writer:
-            for user in users_to_write:
-                user_writer.put_item(Item=user)
-            for car in cars_to_write:
-                car_writer.put_item(Item=car)
+    with user_table.batch_writer() as user_batch_writer:
+        for user in users_to_write:
+            user_batch_writer.put_item(Item=user)
+
+    with car_table.batch_writer() as car_batch_writer:
+        for car in cars_to_write:
+            car_batch_writer.put_item(Item=car)
