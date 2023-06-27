@@ -25,7 +25,7 @@ def process_new_users(event, _):
     logger.info(f"Data collection complete")
 
     try:
-        logger.info(f"Staring database write")
+        logger.info(f"Starting database write")
         write_users_and_cars_to_db(users_to_write_to_db, cars_to_write_to_db)
         logger.info(f"Database write successful")
     except Exception as err:
