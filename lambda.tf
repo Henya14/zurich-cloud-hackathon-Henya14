@@ -9,7 +9,7 @@ resource "aws_lambda_function" "user_data_processor" {
   function_name = "user_data_processor"
   filename = "code.zip"
   source_code_hash = data.archive_file.lambda_code_zip.output_base64sha256
-  role = aws_iam_role.lambda_bucket_read_role.arn
+  role = aws_iam_role.user_processor_lambda_role.arn
   runtime = "python3.10"
   handler = "user_data_processor.process_new_users"
   timeout = 200
