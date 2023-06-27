@@ -7,11 +7,9 @@ import uuid
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-dynamodb =  boto3.resource('dynamodb', region_name="us-east-1")
-s3_client = boto3.client('s3', region_name="us-east-1", endpoint_url=f"http://{os.environ.get('LOCALSTACK_HOSTNAME','')}:4566")
-
-
-
+endpoint_url = f"http://{os.environ.get('LOCALSTACK_HOSTNAME')}:os.environ.get('EDGE_PORT')" if os.environ.get('LOCALSTACK_HOSTNAME', None) else None
+dynamodb =  boto3.resource('dynamodb', region_name=os.environ.get('AWS_REGION'), endpoint_url=endpoint_url)
+s3_client = boto3.client('s3', region_name=os.environ.get('AWS_REGION'), endpoint_url=endpoint_url)
 
 def process_new_users(event, _):
     if "Records" not in event:
