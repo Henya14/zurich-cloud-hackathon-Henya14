@@ -22,7 +22,7 @@ def process_new_users(event, _):
     logger.info(f"Data collection complete")
 
     try:
-        logger.info(f"Starting database write {users_to_write_to_db}")
+        logger.info(f"Starting database write")
         write_data_to_db(data_list=users_to_write_to_db, db_name=os.environ.get("USER_DB_NAME"))
         logger.info(f"Database write successful")
     except Exception as err:
