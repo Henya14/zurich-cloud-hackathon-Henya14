@@ -20,7 +20,7 @@ In DynamoDB nested objects can be stored, but querying and indexing them is pret
 To flatten the user object I moved the car objects' attributes into the user objects' attributes like in the example below.
 
 This is a user object
-```json
+```javascript
 {
     "id": "123",
     "car": {
@@ -32,7 +32,7 @@ This is a user object
 }
 ```
 This is the flattened user object: 
-```json
+```javascript
 {
     "id": "123",
     "car.make": "Seat",
