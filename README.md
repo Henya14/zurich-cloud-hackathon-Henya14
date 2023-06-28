@@ -9,7 +9,7 @@ I created an S3 bucket where the user data can be uploaded.
 The Lambda is triggered with the S3's ObjectCreated event. 
 When the Lambda is triggered it downloads the JSON file from the S3 bucket and transforms the users into the databases format. 
 
-After the Lambda collects and transforms all the users it writes them into the DynamoDB table.
+After the Lambda collects and transforms all the users it writes them into the DynamoDB table in batch to make writing efficient.
 
 I decided to put the user and car entities into the same table, this way I do not have to worry about fetching the car object for the user or keeping the car reference up to date. 
 
