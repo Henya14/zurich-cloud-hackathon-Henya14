@@ -23,7 +23,7 @@ data "aws_iam_policy_document" "user_processor_lambda_role_policy_document" {
 			"dynamodb:UpdateItem"
      ]
      effect = "Allow"
-     resources = [aws_dynamodb_table.user_table.arn, aws_dynamodb_table.car_table.arn]
+     resources = [aws_dynamodb_table.user_table.arn]
   }
 
   

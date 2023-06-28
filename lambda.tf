@@ -14,10 +14,11 @@ resource "aws_lambda_function" "user_data_processor" {
   handler = "user_data_processor.process_new_users"
   timeout = 200
 
+  
   environment {
     variables = {
-      user_db_name = var.user_db_name 
-      car_db_name = var.car_db_name 
+      USER_DB_NAME = var.user_db_name 
+      AWS_REGION = var.aws_region
     }
   }
 }

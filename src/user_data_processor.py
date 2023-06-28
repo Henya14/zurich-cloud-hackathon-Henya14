@@ -2,7 +2,6 @@ import boto3
 import json
 import logging
 import os
-import uuid
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -13,20 +12,18 @@ s3_client = boto3.client('s3', region_name=os.environ.get('AWS_REGION'), endpoin
 
 def process_new_users(event, _):
     users_to_write_to_db = []
-    cars_to_write_to_db = []
 
     logger.info(f"Collecting data to write into database")
     for record in event["Records"]:
         users = get_users_from_record(record)
         for user in users:
-            car, user = create_car_and_user_db_items(user)
+            user = transform_user_to_db_user(user)
             users_to_write_to_db.append(user)
-            cars_to_write_to_db.append(car)
     logger.info(f"Data collection complete")
 
     try:
-        logger.info(f"Starting database write")
-        write_users_and_cars_to_db(users_to_write_to_db, cars_to_write_to_db)
+        logger.info(f"Starting database write {users_to_write_to_db}")
+        write_data_to_db(data_list=users_to_write_to_db, db_name=os.environ.get("USER_DB_NAME"))
         logger.info(f"Database write successful")
     except Exception as err:
         logger.error(f"Couldn't save data to database. Error: {err}", )
@@ -40,21 +37,17 @@ def get_users_from_record(record):
     users = json.loads(user_file["Body"].read())
     return users
 
-def create_car_and_user_db_items(user):
+def transform_user_to_db_user(user: dict):
     car = user["car"]
-    car_uuid = str(uuid.uuid4())
-    user["car"] = car_uuid
-    car["id"] = car_uuid
-    return car, user
+    for key in car:
+        user[f"car.{key}"] = car[key]
+        
+    user.pop("car")
+    return user
     
-def write_users_and_cars_to_db(users_to_write, cars_to_write):
-    user_table = dynamodb.Table(os.environ.get("user_db_name"))
-    car_table = dynamodb.Table(os.environ.get("car_db_name"))
+def write_data_to_db(data_list, db_name):
+    user_table = dynamodb.Table(db_name)
     
     with user_table.batch_writer() as user_batch_writer:
-        for user in users_to_write:
-            user_batch_writer.put_item(Item=user)
-
-    with car_table.batch_writer() as car_batch_writer:
-        for car in cars_to_write:
-            car_batch_writer.put_item(Item=car)
+        for data in data_list:
+            user_batch_writer.put_item(Item=data)

@@ -10,8 +10,8 @@ variable "user_db_name" {
   default = "user_table"
 }
 
-variable "car_db_name" {
+variable "aws_region" {
   type = string 
-  description = "The name of the car dynamodb table"
-  default = "car_table"
+  description = "The region where the aws resources are"
+  default = "us-east-1"
 }
