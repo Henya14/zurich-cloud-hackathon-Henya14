@@ -25,9 +25,9 @@ This is a user object
     "id": "123",
     "car": {
         "make": "Seat",
-        "model": "Leon"
+        "model": "Leon",
         //...
-    }
+    },
     //...
 }
 ```
@@ -36,7 +36,7 @@ This is the flattened user object:
 {
     "id": "123",
     "car.make": "Seat",
-    "car.model": "Leon"
+    "car.model": "Leon",
     //...
 }
 ```
