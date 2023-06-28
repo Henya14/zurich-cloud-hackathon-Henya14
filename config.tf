@@ -6,13 +6,6 @@ terraform {
         source = "hashicorp/aws"
     }
   }
-
- /* backend "s3" {
-    bucket = "terraform-backend-states"
-    encrypt = true
-    key = "user_data_process.tfstate"
-    region = "us-east-1"
-  }*/
 }
 
 provider "aws" {
